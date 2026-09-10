@@ -3,48 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Styled Website</title>
+    <title>PokeVault - Rare Cards</title>
     <style>
-        /* This is where the design magic happens! */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a1a;
+            background-color: #0f1115;
             color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header / Navigation */
+        header {
+            background-color: #1a1d24;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #ffcb05; /* Classic Pokémon Yellow */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #ffcb05;
+            text-shadow: 2px 2px #3b4cca; /* Pokémon Blue outline shadow */
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            color: #a0a5b5;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Cards Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* Individual Card Item */
+        .shop-card {
+            background-color: #1a1d24;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #2d323f;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .shop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 203, 5, 0.2);
+            border-color: #ffcb05;
+        }
+
+        /* Placeholder image box since we don't have images yet */
+        .card-image-placeholder {
+            width: 100%;
+            height: 250px;
+            background-color: #2d323f;
+            border-radius: 10px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            color: #62697a;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
 
-        .card {
-            background-color: #2d2d2d;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            max-width: 400px;
+        .shop-card h3 {
+            margin: 10px 0 5px 0;
+            font-size: 1.4rem;
         }
 
-        h1 {
-            color: #0070f3; /* Vercel Blue color */
+        .condition {
+            display: inline-block;
+            background-color: #ffcb05;
+            color: #000;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 5px;
             margin-bottom: 10px;
         }
 
-        p {
-            color: #a0a0a0;
-            line-height: 1.6;
+        .price {
+            font-size: 1.6rem;
+            color: #4edf7e;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .buy-btn {
+            background-color: #3b4cca;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .buy-btn:hover {
+            background-color: #2a3795;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Welcome to My Site</h1>
-        <p>I am building this site locally, tracking it with Git, and getting ready to host it on Vercel!</p>
+    <header>
+        <h1>PokeVault Collectibles</h1>
+        <p>Premium, Certified Rare Pokémon Cards Sourced Direct from Collector Auctions</p>
+    </header>
+
+    <div class="container">
+        <div class="intro">
+            <h2>Current Featured Grails</h2>
+            <p>All cards are authenticated, securely stored, and ready to ship worldwide.</p>
+        </div>
+
+        <div class="grid">
+            <!-- Card 1 -->
+            <div class="shop-card">
+                <div class="card-image-placeholder">[ Charizard Image ]</div>
+                <span class="condition">PSA 9 MINT</span>
+                <h3>Base Set Charizard Holo</h3>
+                <div class="price">$350.00</div>
+                <button class="buy-btn">Inquire to Buy</button>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="shop-card">
+                <div class="card-image-placeholder">[ Lugia Image ]</div>
+                <span class="condition">PSA 10 GEM MINT</span>
+                <h3>Neo Genesis Lugia Holo</h3>
+                <div class="price">$1,200.00</div>
+                <button class="buy-btn">Inquire to Buy</button>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="shop-card">
+                <div class="card-image-placeholder">[ Gold Star Umbreon Image ]</div>
+                <span class="condition">BGS 9.5 Mint+</span>
+                <h3>Umbreon Gold Star POP Series 5</h3>
+                <div class="price">$2,400.00</div>
+                <button class="buy-btn">Inquire to Buy</button>
+            </div>
+        </div>
     </div>
 
 </body>
 </html>
-
