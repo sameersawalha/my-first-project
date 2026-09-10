@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeVault - Rare Cards</title>
+    <title>PokeVault - Rare Cards & Admin</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,66 +13,108 @@
             padding: 0;
         }
 
-        /* Header / Navigation */
         header {
             background-color: #1a1d24;
             padding: 20px;
             text-align: center;
-            border-bottom: 3px solid #ffcb05; /* Classic Pokémon Yellow */
+            border-bottom: 3px solid #ffcb05;
+            position: relative;
         }
 
         header h1 {
             margin: 0;
             font-size: 2.5rem;
             color: #ffcb05;
-            text-shadow: 2px 2px #3b4cca; /* Pokémon Blue outline shadow */
+            text-shadow: 2px 2px #3b4cca;
         }
 
-        header p {
-            margin: 5px 0 0 0;
+        /* Admin Controls */
+        .admin-toggle-btn {
+            position: absolute;
+            right: 20px;
+            top: 25px;
+            background: #2d323f;
+            color: #ffcb05;
+            border: 1px solid #ffcb05;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .admin-panel {
+            background-color: #1a1d24;
+            border: 2px dashed #ffcb05;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            display: none; /* Hidden by default */
+        }
+
+        .admin-panel h2 {
+            margin-top: 0;
+            color: #ffcb05;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
             color: #a0a5b5;
-            font-style: italic;
         }
 
-        /* Main Container */
+        .form-group input, .form-group select {
+            padding: 10px;
+            background: #2d323f;
+            border: 1px solid #62697a;
+            color: white;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .admin-submit-btn {
+            background-color: #ffcb05;
+            color: black;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Shop Layout */
         .container {
             max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        .intro {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        /* Cards Grid Layout */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
 
-        /* Individual Card Item */
         .shop-card {
             background-color: #1a1d24;
             border-radius: 15px;
             padding: 20px;
             text-align: center;
             border: 1px solid #2d323f;
-            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
         }
 
-        .shop-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 203, 5, 0.2);
-            border-color: #ffcb05;
-        }
-
-        /* Placeholder image box since we don't have images yet */
         .card-image-placeholder {
             width: 100%;
-            height: 250px;
+            height: 200px;
             background-color: #2d323f;
             border-radius: 10px;
             display: flex;
@@ -81,11 +123,6 @@
             color: #62697a;
             font-weight: bold;
             margin-bottom: 15px;
-        }
-
-        .shop-card h3 {
-            margin: 10px 0 5px 0;
-            font-size: 1.4rem;
         }
 
         .condition {
@@ -106,21 +143,15 @@
             margin: 10px 0;
         }
 
-        .buy-btn {
-            background-color: #3b4cca;
+        .delete-btn {
+            background-color: #ff4d4d;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
+            padding: 5px 10px;
+            border-radius: 4px;
             cursor: pointer;
-            width: 100%;
-            transition: background 0.2s;
-        }
-
-        .buy-btn:hover {
-            background-color: #2a3795;
+            margin-top: 10px;
+            display: none; /* Hidden until Admin mode is active */
         }
     </style>
 </head>
@@ -128,44 +159,99 @@
 
     <header>
         <h1>PokeVault Collectibles</h1>
-        <p>Premium, Certified Rare Pokémon Cards Sourced Direct from Collector Auctions</p>
+        <button class="admin-toggle-btn" onclick="toggleAdminPanel()">🔧 Admin Mode</button>
     </header>
 
     <div class="container">
-        <div class="intro">
-            <h2>Current Featured Grails</h2>
-            <p>All cards are authenticated, securely stored, and ready to ship worldwide.</p>
+        <!-- Admin Panel Form -->
+        <div class="admin-panel" id="adminPanel">
+            <h2>Add / Update Inventory</h2>
+            <form id="cardForm" onsubmit="addCard(event)">
+                <div class="form-group">
+                    <label>Card Name</label>
+                    <input type="text" id="cardName" placeholder="e.g., Base Set Charizard Holo" required>
+                </div>
+                <div class="form-group">
+                    <label>Condition Grading</label>
+                    <input type="text" id="cardCondition" placeholder="e.g., PSA 9 MINT" required>
+                </div>
+                <div class="form-group">
+                    <label>Price ($)</label>
+                    <input type="number" id="cardPrice" placeholder="350" required>
+                </div>
+                <button type="submit" class="admin-submit-btn">Add Card to Storefront</button>
+            </form>
         </div>
 
-        <div class="grid">
-            <!-- Card 1 -->
-            <div class="shop-card">
-                <div class="card-image-placeholder">[ Charizard Image ]</div>
-                <span class="condition">PSA 9 MINT</span>
-                <h3>Base Set Charizard Holo</h3>
-                <div class="price">$350.00</div>
-                <button class="buy-btn">Inquire to Buy</button>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="shop-card">
-                <div class="card-image-placeholder">[ Lugia Image ]</div>
-                <span class="condition">PSA 10 GEM MINT</span>
-                <h3>Neo Genesis Lugia Holo</h3>
-                <div class="price">$1,200.00</div>
-                <button class="buy-btn">Inquire to Buy</button>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="shop-card">
-                <div class="card-image-placeholder">[ Gold Star Umbreon Image ]</div>
-                <span class="condition">BGS 9.5 Mint+</span>
-                <h3>Umbreon Gold Star POP Series 5</h3>
-                <div class="price">$2,400.00</div>
-                <button class="buy-btn">Inquire to Buy</button>
-            </div>
+        <!-- Store Inventory Grid -->
+        <div class="grid" id="inventoryGrid">
+            <!-- JavaScript will place cards here automatically -->
         </div>
     </div>
 
+    <script>
+        // Default inventory items
+        let cards = [
+            { id: 1, name: "Base Set Charizard Holo", condition: "PSA 9 MINT", price: 350 },
+            { id: 2, name: "Neo Genesis Lugia Holo", condition: "PSA 10 GEM MINT", price: 1200 }
+        ];
+
+        let isAdminMode = false;
+
+        // Function to render cards to the screen
+        function displayCards() {
+            const grid = document.getElementById('inventoryGrid');
+            grid.innerHTML = ''; // Clear old grid items
+
+            cards.forEach(card => {
+                grid.innerHTML += `
+                    <div class="shop-card">
+                        <div class="card-image-placeholder">[ ${card.name} ]</div>
+                        <span class="condition">${card.condition}</span>
+                        <h3>${card.name}</h3>
+                        <div class="price">$${card.price.toLocaleString()}</div>
+                        <button class="delete-btn" style="display: ${isAdminMode ? 'inline-block' : 'none'}" onclick="deleteCard(${card.id})">Remove Card</button>
+                    </div>
+                `;
+            });
+        }
+
+        // Toggle Admin Panel display
+        function toggleAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            isAdminMode = !isAdminMode;
+            panel.style.display = isAdminMode ? 'block' : 'none';
+            displayCards(); // Rerender to show/hide delete buttons
+        }
+
+        // Add a new card from form inputs
+        function addCard(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('cardName').value;
+            const condition = document.getElementById('cardCondition').value;
+            const price = parseFloat(document.getElementById('cardPrice').value);
+
+            const newCard = {
+                id: Date.now(), // Generate a unique id
+                name: name,
+                condition: condition,
+                price: price
+            };
+
+            cards.push(newCard);
+            displayCards();
+            document.getElementById('cardForm').reset(); // Clear fields
+        }
+
+        // Delete a card
+        function deleteCard(id) {
+            cards = cards.filter(card => card.id !== id);
+            displayCards();
+        }
+
+        // Initial launch load
+        displayCards();
+    </script>
 </body>
 </html>
