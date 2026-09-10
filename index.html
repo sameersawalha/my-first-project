@@ -1,5 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokeVault Premium</title>
+    <style>
+        :root {
+            --pk-yellow: #ffcb05;
+            --pk-blue: #3b4cca;
+            --dark-bg: #0b0d11;
+            --card-bg: #151922;
+            --border-color: #242b3a;
+            --neon-green: #00ff66;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: var(--card-bg);
+            padding: 25px;
+            text-align: center;
+            border-bottom: 4px solid var(--pk-yellow);
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            color: var(--pk-yellow);
+            text-shadow: 3px 3px 0px var(--pk-blue);
+            letter-spacing: 2px;
+        }
+        header p {
+            margin: 8px 0 0 0;
+            color: #8e9bb5;
+            font-size: 1.1rem;
+        }
+        .admin-toggle-btn {
+            position: absolute;
+            right: 30px;
+            top: 35px;
+            background: linear-gradient(135deg, #1e2533, #2d384e);
+            color: var(--pk-yellow);
+            border: 2px solid var(--pk-yellow);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .controls-bar {
+            margin-bottom: 30px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .admin-panel {
+            background: linear-gradient(145deg, #151922, #1c2230);
+            border: 2px dashed var(--pk-yellow);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .admin-panel h2 {
+            margin-top: 0;
+            color: var(--pk-yellow);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .form-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 8px;
+            color: #8e9bb5;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .form-group input {
+            padding: 12px;
+            background: #202734;
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .admin-submit-btn {
+            background-color: var(--pk-yellow);
+            color: #000;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+        }
+        .shop-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        .card-img-box {
+            width: 100%;
+            height: 280px;
+            background-color: #1c2230;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #283144;
+        }
+        .card-img-box img {
+            width: auto;
+            height: 100%;
+            object-fit: contain;
+        }
+        .no-img-text {
+            color: #4a5468;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+        .condition-badge {
+            display: inline-block;
+            background: rgba(255, 203, 5, 0.1);
+            color: var(--pk-yellow);
+            border: 1px solid var(--pk-yellow);
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        h3 {
+            margin: 5px 0 10px 0;
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+        .price-tag {
+            font-size: 1.8rem;
+            color: var(--neon-green);
+            font-weight: 800;
+            margin: 15px 0;
+        }
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .buy-btn {
+            flex: 1;
+            background-color: var(--pk-blue);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .delete-btn {
+            background-color: #ff3333;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PokeVault Store</h1>
+        <p>Elite eBay Assets & Certified Grail Collectibles</p>
+        <button class="admin-toggle-btn" onclick="toggleAdmin()">🔧 Control Deck</button>
+    </header>
+    <div class="container">
+        <div class="admin-panel" id="adminDeck">
+            <h2>Inventory Intake Form</h2>
+            <form id="pokeForm" onsubmit="createNewCard(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Card Name</label>
+                        <input type="text" id="nameIn" placeholder="Shadowless Charizard" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Grading Tier</label>
+                        <input type="text" id="gradeIn" placeholder="PSA 10 GEM MINT" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Market Price ($)</label>
+                        <input type="number" id="priceIn" placeholder="4200" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Image Link (Optional)</label>
+                        <input type="url" id="imgIn" placeholder="Paste eBay image URL here">
+                    </div>
+                </div>
+                <button type="submit" class="admin-submit-btn">Load Into Live Vault Stock</button>
+            </form>
+        </div>
+        <div class="controls-bar">
+            <input type="text" class="search-input" id="searchBox" placeholder="🔍 Search current inventory..." oninput="filterCards()">
+        </div>
+        <div class="grid" id="cardGrid"></div>
+    </div>
     <script>
-        // Premium Mock Data
         let vaultStock = [
             {
                 id: 1,
@@ -16,17 +260,16 @@
                 img: ""
             }
         ];
-
         let devMode = false;
-
-        function renderVault(itemsToRender = vaultStock) {
+        function renderVault() {
             const grid = document.getElementById('cardGrid');
+            const searchTemplate = document.getElementById('searchBox').value.toLowerCase();
+            const filteredStock = vaultStock.filter(c => c.name.toLowerCase().includes(searchTemplate));
             grid.innerHTML = '';
-
-            itemsToRender.forEach(card => {
+            filteredStock.forEach(card => {
                 const hasImg = card.img && card.img.trim() !== "";
                 const mediaContent = hasImg ? `<img src="${card.img}" alt="${card.name}">` : `<span class="no-img-text">[ Missing Media File ]</span>`;
-
+                const deleteButtonHTML = devMode ? `<button class="delete-btn" onclick="purgeCard(${card.id})">✖</button>` : '';
                 grid.innerHTML += `
                     <div class="shop-card">
                         <div class="card-img-box">${mediaContent}</div>
@@ -35,49 +278,18 @@
                         <div class="price-tag">$${card.price.toLocaleString()}</div>
                         <div class="action-row">
                             <button class="buy-btn">Acquire Asset</button>
-                            <button class="delete-btn" id="del-${card.id}" style="display: ${devMode ? 'block' : 'none'}" onclick="purgeCard(${card.id})">✖</button>
+                            ${deleteButtonHTML}
                         </div>
                     </div>
                 `;
             });
         }
-
-        // FIXED: This now matches the "toggleAdmin()" name in your HTML button!
         function toggleAdmin() {
             const deck = document.getElementById('adminDeck');
             devMode = !devMode;
             deck.style.display = devMode ? 'block' : 'none';
             renderVault();
         }
-
         function createNewCard(e) {
             e.preventDefault();
             const newAsset = {
-                id: Date.now(),
-                name: document.getElementById('nameIn').value,
-                condition: document.getElementById('gradeIn').value,
-                price: parseFloat(document.getElementById('priceIn').value),
-                img: document.getElementById('imgIn').value
-            };
-
-            vaultStock.push(newAsset);
-            renderVault();
-            document.getElementById('pokeForm').reset();
-        }
-
-        function purgeCard(id) {
-            vaultStock = vaultStock.filter(c => c.id !== id);
-            renderVault();
-        }
-
-        function filterCards() {
-            const query = document.getElementById('searchBox').value.toLowerCase();
-            const filtered = vaultStock.filter(c => c.name.toLowerCase().includes(query));
-            renderVault(filtered);
-        }
-
-        // Run on page load
-        renderVault();
-    </script>
-</body>
-</html>
