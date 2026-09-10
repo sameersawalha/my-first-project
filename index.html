@@ -1,257 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeVault - Rare Cards & Admin</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f1115;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #1a1d24;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 3px solid #ffcb05;
-            position: relative;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            color: #ffcb05;
-            text-shadow: 2px 2px #3b4cca;
-        }
-
-        /* Admin Controls */
-        .admin-toggle-btn {
-            position: absolute;
-            right: 20px;
-            top: 25px;
-            background: #2d323f;
-            color: #ffcb05;
-            border: 1px solid #ffcb05;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .admin-panel {
-            background-color: #1a1d24;
-            border: 2px dashed #ffcb05;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 600px;
-            display: none; /* Hidden by default */
-        }
-
-        .admin-panel h2 {
-            margin-top: 0;
-            color: #ffcb05;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #a0a5b5;
-        }
-
-        .form-group input, .form-group select {
-            padding: 10px;
-            background: #2d323f;
-            border: 1px solid #62697a;
-            color: white;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        .admin-submit-btn {
-            background-color: #ffcb05;
-            color: black;
-            border: none;
-            padding: 12px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        /* Shop Layout */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .shop-card {
-            background-color: #1a1d24;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #2d323f;
-            position: relative;
-        }
-
-        .card-image-placeholder {
-            width: 100%;
-            height: 200px;
-            background-color: #2d323f;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #62697a;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .condition {
-            display: inline-block;
-            background-color: #ffcb05;
-            color: #000;
-            font-size: 0.8rem;
-            font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .price {
-            font-size: 1.6rem;
-            color: #4edf7e;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .delete-btn {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-            display: none; /* Hidden until Admin mode is active */
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>PokeVault Collectibles</h1>
-        <button class="admin-toggle-btn" onclick="toggleAdminPanel()">🔧 Admin Mode</button>
-    </header>
-
-    <div class="container">
-        <!-- Admin Panel Form -->
-        <div class="admin-panel" id="adminPanel">
-            <h2>Add / Update Inventory</h2>
-            <form id="cardForm" onsubmit="addCard(event)">
-                <div class="form-group">
-                    <label>Card Name</label>
-                    <input type="text" id="cardName" placeholder="e.g., Base Set Charizard Holo" required>
-                </div>
-                <div class="form-group">
-                    <label>Condition Grading</label>
-                    <input type="text" id="cardCondition" placeholder="e.g., PSA 9 MINT" required>
-                </div>
-                <div class="form-group">
-                    <label>Price ($)</label>
-                    <input type="number" id="cardPrice" placeholder="350" required>
-                </div>
-                <button type="submit" class="admin-submit-btn">Add Card to Storefront</button>
-            </form>
-        </div>
-
-        <!-- Store Inventory Grid -->
-        <div class="grid" id="inventoryGrid">
-            <!-- JavaScript will place cards here automatically -->
-        </div>
-    </div>
-
     <script>
-        // Default inventory items
-        let cards = [
-            { id: 1, name: "Base Set Charizard Holo", condition: "PSA 9 MINT", price: 350 },
-            { id: 2, name: "Neo Genesis Lugia Holo", condition: "PSA 10 GEM MINT", price: 1200 }
+        // Premium Mock Data
+        let vaultStock = [
+            {
+                id: 1,
+                name: "1st Edition Base Charizard",
+                condition: "PSA 9 MINT",
+                price: 8500,
+                img: "https://unsplash.com"
+            },
+            {
+                id: 2,
+                name: "Shining Tyranitar Neo Destiny",
+                condition: "BGS 9.5 GEM",
+                price: 1100,
+                img: ""
+            }
         ];
 
-        let isAdminMode = false;
+        let devMode = false;
 
-        // Function to render cards to the screen
-        function displayCards() {
-            const grid = document.getElementById('inventoryGrid');
-            grid.innerHTML = ''; // Clear old grid items
+        function renderVault(itemsToRender = vaultStock) {
+            const grid = document.getElementById('cardGrid');
+            grid.innerHTML = '';
 
-            cards.forEach(card => {
+            itemsToRender.forEach(card => {
+                const hasImg = card.img && card.img.trim() !== "";
+                const mediaContent = hasImg ? `<img src="${card.img}" alt="${card.name}">` : `<span class="no-img-text">[ Missing Media File ]</span>`;
+
                 grid.innerHTML += `
                     <div class="shop-card">
-                        <div class="card-image-placeholder">[ ${card.name} ]</div>
-                        <span class="condition">${card.condition}</span>
+                        <div class="card-img-box">${mediaContent}</div>
+                        <span class="condition-badge">${card.condition}</span>
                         <h3>${card.name}</h3>
-                        <div class="price">$${card.price.toLocaleString()}</div>
-                        <button class="delete-btn" style="display: ${isAdminMode ? 'inline-block' : 'none'}" onclick="deleteCard(${card.id})">Remove Card</button>
+                        <div class="price-tag">$${card.price.toLocaleString()}</div>
+                        <div class="action-row">
+                            <button class="buy-btn">Acquire Asset</button>
+                            <button class="delete-btn" id="del-${card.id}" style="display: ${devMode ? 'block' : 'none'}" onclick="purgeCard(${card.id})">✖</button>
+                        </div>
                     </div>
                 `;
             });
         }
 
-        // Toggle Admin Panel display
-        function toggleAdminPanel() {
-            const panel = document.getElementById('adminPanel');
-            isAdminMode = !isAdminMode;
-            panel.style.display = isAdminMode ? 'block' : 'none';
-            displayCards(); // Rerender to show/hide delete buttons
+        // FIXED: This now matches the "toggleAdmin()" name in your HTML button!
+        function toggleAdmin() {
+            const deck = document.getElementById('adminDeck');
+            devMode = !devMode;
+            deck.style.display = devMode ? 'block' : 'none';
+            renderVault();
         }
 
-        // Add a new card from form inputs
-        function addCard(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('cardName').value;
-            const condition = document.getElementById('cardCondition').value;
-            const price = parseFloat(document.getElementById('cardPrice').value);
-
-            const newCard = {
-                id: Date.now(), // Generate a unique id
-                name: name,
-                condition: condition,
-                price: price
+        function createNewCard(e) {
+            e.preventDefault();
+            const newAsset = {
+                id: Date.now(),
+                name: document.getElementById('nameIn').value,
+                condition: document.getElementById('gradeIn').value,
+                price: parseFloat(document.getElementById('priceIn').value),
+                img: document.getElementById('imgIn').value
             };
 
-            cards.push(newCard);
-            displayCards();
-            document.getElementById('cardForm').reset(); // Clear fields
+            vaultStock.push(newAsset);
+            renderVault();
+            document.getElementById('pokeForm').reset();
         }
 
-        // Delete a card
-        function deleteCard(id) {
-            cards = cards.filter(card => card.id !== id);
-            displayCards();
+        function purgeCard(id) {
+            vaultStock = vaultStock.filter(c => c.id !== id);
+            renderVault();
         }
 
-        // Initial launch load
-        displayCards();
+        function filterCards() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const filtered = vaultStock.filter(c => c.name.toLowerCase().includes(query));
+            renderVault(filtered);
+        }
+
+        // Run on page load
+        renderVault();
     </script>
 </body>
 </html>
