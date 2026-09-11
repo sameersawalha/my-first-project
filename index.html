@@ -13,6 +13,7 @@
             --border-color: #242b3a;
             --neon-green: #00ff66;
         }
+
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--dark-bg);
@@ -20,6 +21,7 @@
             margin: 0;
             padding: 0;
         }
+
         header {
             background-color: var(--card-bg);
             padding: 25px;
@@ -28,6 +30,7 @@
             position: relative;
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
+
         header h1 {
             margin: 0;
             font-size: 2.8rem;
@@ -35,11 +38,13 @@
             text-shadow: 3px 3px 0px var(--pk-blue);
             letter-spacing: 2px;
         }
+
         header p {
             margin: 8px 0 0 0;
             color: #8e9bb5;
             font-size: 1.1rem;
         }
+
         .admin-toggle-btn {
             position: absolute;
             right: 30px;
@@ -51,15 +56,19 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.2s;
         }
+
         .container {
             max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
         }
+
         .controls-bar {
             margin-bottom: 30px;
         }
+
         .search-input {
             width: 100%;
             padding: 15px;
@@ -70,6 +79,7 @@
             font-size: 1rem;
             box-sizing: border-box;
         }
+
         .admin-panel {
             background: linear-gradient(145deg, #151922, #1c2230);
             border: 2px dashed var(--pk-yellow);
@@ -79,28 +89,33 @@
             display: none;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+
         .admin-panel h2 {
             margin-top: 0;
             color: var(--pk-yellow);
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
         }
+
         .form-grid {
             display: flex;
             flex-direction: column;
             gap: 20px;
             margin-bottom: 20px;
         }
+
         .form-group {
             display: flex;
             flex-direction: column;
         }
+
         .form-group label {
             margin-bottom: 8px;
             color: #8e9bb5;
             font-size: 0.9rem;
             text-transform: uppercase;
         }
+
         .form-group input {
             padding: 12px;
             background: #202734;
@@ -111,6 +126,7 @@
             box-sizing: border-box;
             width: 100%;
         }
+
         .admin-submit-btn {
             background-color: var(--pk-yellow);
             color: #000;
@@ -122,11 +138,13 @@
             cursor: pointer;
             width: 100%;
         }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 35px;
         }
+
         .shop-card {
             background-color: var(--card-bg);
             border-radius: 20px;
@@ -135,6 +153,7 @@
             border: 1px solid var(--border-color);
             position: relative;
         }
+
         .card-img-box {
             width: 100%;
             height: 280px;
@@ -147,16 +166,19 @@
             overflow: hidden;
             border: 1px solid #283144;
         }
+
         .card-img-box img {
             width: auto;
             height: 100%;
             object-fit: contain;
         }
+
         .no-img-text {
             color: #4a5468;
             font-size: 0.9rem;
             font-style: italic;
         }
+
         .condition-badge {
             display: inline-block;
             background: rgba(255, 203, 5, 0.1);
@@ -169,22 +191,26 @@
             margin-bottom: 12px;
             text-transform: uppercase;
         }
+
         h3 {
             margin: 5px 0 10px 0;
             font-size: 1.5rem;
             color: #ffffff;
         }
+
         .price-tag {
             font-size: 1.8rem;
             color: var(--neon-green);
             font-weight: 800;
             margin: 15px 0;
         }
+
         .action-row {
             display: flex;
             gap: 10px;
             margin-top: 15px;
         }
+
         .buy-btn {
             flex: 1;
             background-color: var(--pk-blue);
@@ -196,6 +222,7 @@
             border-radius: 8px;
             cursor: pointer;
         }
+
         .delete-btn {
             background-color: #ff3333;
             color: white;
@@ -208,12 +235,15 @@
     </style>
 </head>
 <body>
+
     <header>
         <h1>PokeVault Store</h1>
         <p>Elite eBay Assets & Certified Grail Collectibles</p>
         <button class="admin-toggle-btn" onclick="toggleAdmin()">🔧 Control Deck</button>
     </header>
+
     <div class="container">
+        <!-- Dashboard -->
         <div class="admin-panel" id="adminDeck">
             <h2>Inventory Intake Form</h2>
             <form id="pokeForm" onsubmit="createNewCard(event)">
@@ -238,11 +268,16 @@
                 <button type="submit" class="admin-submit-btn">Load Into Live Vault Stock</button>
             </form>
         </div>
+
+        <!-- Search Feature -->
         <div class="controls-bar">
             <input type="text" class="search-input" id="searchBox" placeholder="🔍 Search current inventory..." oninput="filterCards()">
         </div>
+
+        <!-- Grid -->
         <div class="grid" id="cardGrid"></div>
     </div>
+
     <script>
         let vaultStock = [
             {
@@ -260,16 +295,22 @@
                 img: ""
             }
         ];
+
         let devMode = false;
+
         function renderVault() {
             const grid = document.getElementById('cardGrid');
             const searchTemplate = document.getElementById('searchBox').value.toLowerCase();
+            
             const filteredStock = vaultStock.filter(c => c.name.toLowerCase().includes(searchTemplate));
+            
             grid.innerHTML = '';
+
             filteredStock.forEach(card => {
                 const hasImg = card.img && card.img.trim() !== "";
                 const mediaContent = hasImg ? `<img src="${card.img}" alt="${card.name}">` : `<span class="no-img-text">[ Missing Media File ]</span>`;
                 const deleteButtonHTML = devMode ? `<button class="delete-btn" onclick="purgeCard(${card.id})">✖</button>` : '';
+
                 grid.innerHTML += `
                     <div class="shop-card">
                         <div class="card-img-box">${mediaContent}</div>
@@ -284,12 +325,39 @@
                 `;
             });
         }
+
         function toggleAdmin() {
             const deck = document.getElementById('adminDeck');
             devMode = !devMode;
             deck.style.display = devMode ? 'block' : 'none';
             renderVault();
         }
+
         function createNewCard(e) {
             e.preventDefault();
             const newAsset = {
+                id: Date.now(),
+                name: document.getElementById('nameIn').value,
+                condition: document.getElementById('gradeIn').value,
+                price: parseFloat(document.getElementById('priceIn').value),
+                img: document.getElementById('imgIn').value
+            };
+
+            vaultStock.push(newAsset);
+            document.getElementById('pokeForm').reset();
+            renderVault();
+        }
+
+        function purgeCard(id) {
+            vaultStock = vaultStock.filter(c => c.id !== id);
+            renderVault();
+        }
+
+        function filterCards() {
+            renderVault();
+        }
+
+        renderVault();
+    </script>
+</body>
+</html>
